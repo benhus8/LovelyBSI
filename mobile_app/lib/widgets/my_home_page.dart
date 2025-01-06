@@ -141,19 +141,54 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: _currentPage > 0 ? _goToPreviousPage : null,
-                      child: const Text('⬅️'),
+                    Container(
+                      margin: const EdgeInsets.only(left: 16), // Margines z lewej strony
+                      child: ElevatedButton(
+                        onPressed: _currentPage > 0 ? _goToPreviousPage : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10), // Zaokrąglone rogi
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5), // Wewnętrzne odstępy
+                          elevation: 5, // Efekt cienia
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // Dostosowanie do treści
+                          children: const [
+                            Icon(Icons.arrow_back), // Ikona obok tekstu
+                            SizedBox(width: 8), // Odstęp
+                          ],
+                        ),
+                      ),
                     ),
                     Text(
                       'Pytania ${_getStartQuestionNumber()}-${_getEndQuestionNumber()} z ${_filteredQuestions.length}',
                     ),
-                    ElevatedButton(
-                      onPressed: ((_currentPage + 1) * _questionsPerPage <
-                              _filteredQuestions.length)
-                          ? _goToNextPage
-                          : null,
-                      child: const Text('➡️'),
+                    Container(
+                      margin: const EdgeInsets.only(right: 16),
+                      child: ElevatedButton(
+                        onPressed: ((_currentPage + 1) * _questionsPerPage < _filteredQuestions.length)
+                            ? _goToNextPage
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          elevation: 5,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            SizedBox(width: 8),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),

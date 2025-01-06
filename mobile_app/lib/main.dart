@@ -11,11 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mobile App',
+      debugShowCheckedModeBanner: false,
+      title: 'Lovely BSI',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'I♡BSI'),
+      home: const MyHomePage(title: 'I💘BSI'),
     );
   }
 }
