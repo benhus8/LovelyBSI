@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 import '../models/question.dart';
 
 class QuestionRepository {
-  // Wczytanie pytań z głównego pliku JSON
   Future<List<Question>> loadQuestions() async {
     final String response = await rootBundle.loadString('assets/questions.json');
     final List<dynamic> data = jsonDecode(response);
