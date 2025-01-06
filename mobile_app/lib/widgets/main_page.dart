@@ -24,6 +24,21 @@ class _MainPageState extends State<MainPage> {
 
   final ScrollController _scrollController = ScrollController();
 
+  Map<String, int> _pageByMode = {
+    "all": 0,
+    "starred": 0,
+    "test": 0,
+    "learning": 0,
+  };
+
+  void _saveCurrentPage(String mode) {
+    _pageByMode[mode] = _currentPage;
+  }
+
+  void _setPageForMode(String mode) {
+    _currentPage = _pageByMode[mode] ?? 0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,18 +65,22 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _toggleStarred() {
+    _saveCurrentPage(_showStarred ? "starred" : "all");
     setState(() {
       _showStarred = !_showStarred;
       _filterQuestions();
+      _setPageForMode(_showStarred ? "starred" : "all");
     });
 
     _saveStarredQuestions();
   }
 
   void _changeMode(String mode) {
+    _saveCurrentPage(_isTestMode ? "test" : "learning");
     setState(() {
       _isTestMode = mode == "Test";
       _filterQuestions();
+      _setPageForMode(_isTestMode ? "test" : "learning");
     });
   }
 
