@@ -28,6 +28,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _loadQuestions();
   }
 
+  void _saveStarredQuestions() async {
+    await QuestionRepository().saveStarredQuestions(_allQuestions);
+  }
+
   Future<void> _loadQuestions() async {
     final questions = await QuestionRepository().loadQuestions();
     setState(() {
@@ -49,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _filterQuestions();
     });
 
+    _saveStarredQuestions();
   }
 
   void _changeMode(String mode) {
