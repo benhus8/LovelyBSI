@@ -12,8 +12,11 @@ Pomysłodawcą oraz właścicielem projektu jest **[@jakubbiniu](https://github.
 ---
 
 ## **CO i jak**
-Apka jest we flutterku, więc bogacze niech se zrobią apk, mnie ne stać.
+Apka jest we flutterku, na dole jest link do aktualnego APK, a bogacze niech se zrobią ipk, mnie ne stać.
 
 ---
 
 Miłego klikania all i walenia bazuni!
+
+Apk na dysku:
+https://drive.google.com/file/d/12gWWdJscdcMAM_S1VS1kRiM9-Sla29Df/view?usp=sharing
