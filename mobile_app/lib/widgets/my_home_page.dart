@@ -142,23 +142,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 16), // Margines z lewej strony
+                      margin: const EdgeInsets.only(left: 16),
                       child: ElevatedButton(
                         onPressed: _currentPage > 0 ? _goToPreviousPage : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.purple,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10), // Zaokrąglone rogi
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5), // Wewnętrzne odstępy
-                          elevation: 5, // Efekt cienia
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          elevation: 5,
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min, // Dostosowanie do treści
+                          mainAxisSize: MainAxisSize.min,
                           children: const [
-                            Icon(Icons.arrow_back), // Ikona obok tekstu
-                            SizedBox(width: 8), // Odstęp
+                            Icon(Icons.arrow_back),
+                            SizedBox(width: 8),
                           ],
                         ),
                       ),

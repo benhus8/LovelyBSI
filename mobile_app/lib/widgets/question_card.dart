@@ -17,7 +17,7 @@ class QuestionCard extends StatefulWidget {
 }
 
 class _QuestionCardState extends State<QuestionCard> {
-  bool highlightAnswers = false; // Czy odpowiedzi mają być podświetlone
+  bool highlightAnswers = false;
   final Set<Answer> selectedAnswers = {};
 
   @override
@@ -31,9 +31,9 @@ class _QuestionCardState extends State<QuestionCard> {
   void _toggleAnswerSelection(Answer answer) {
     setState(() {
       if (selectedAnswers.contains(answer)) {
-        selectedAnswers.remove(answer); // Usuń zaznaczenie
+        selectedAnswers.remove(answer);
       } else {
-        selectedAnswers.add(answer); // Dodaj zaznaczenie
+        selectedAnswers.add(answer);
       }
     });
   }
@@ -41,17 +41,17 @@ class _QuestionCardState extends State<QuestionCard> {
   Color _getAnswerColor(Answer answer) {
     if (!highlightAnswers) {
       return selectedAnswers.contains(answer)
-          ? Colors.grey.withOpacity(0.3) // Zaznaczona odpowiedź
-          : Colors.white; // Nie zaznaczona
+          ? Colors.grey.withOpacity(0.3)
+          : Colors.white;
     }
     if (answer.isCorrect && selectedAnswers.contains(answer)) {
-      return Colors.green.withOpacity(0.3); // Zaznaczona poprawna odpowiedź
+      return Colors.green.withOpacity(0.3);
     } else if (answer.isCorrect && !selectedAnswers.contains(answer)) {
-      return Colors.green.withOpacity(0.3); // Nie zaznaczona, ale poprawna
+      return Colors.green.withOpacity(0.3);
     } else if (!answer.isCorrect && selectedAnswers.contains(answer)) {
-      return Colors.red.withOpacity(0.3); // Zaznaczona, ale niepoprawna odpowiedź
+      return Colors.red.withOpacity(0.3);
     }
-    return Colors.white; // Niepoprawna i nie zaznaczona
+    return Colors.white;
   }
 
   @override
@@ -63,27 +63,25 @@ class _QuestionCardState extends State<QuestionCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tytuł pytania
             Text(
-              widget.question.title,
+              '${widget.question.questionId}. ${widget.question.title}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            // Wyświetlenie odpowiedzi
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: widget.question.answers.map((answer) {
                 return GestureDetector(
                   onTap: () {
                     if (widget.isTestMode && !highlightAnswers) {
-                      _toggleAnswerSelection(answer); // Zaznaczanie odpowiedzi
+                      _toggleAnswerSelection(answer);
                     }
                   },
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 8.0),
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                      color: _getAnswerColor(answer), // Kolor zależny od stanu
+                      color: _getAnswerColor(answer),
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -96,17 +94,15 @@ class _QuestionCardState extends State<QuestionCard> {
               }).toList(),
             ),
             const SizedBox(height: 16),
-            // Przycisk "Sprawdź" (widoczny tylko w trybie Test)
             if (widget.isTestMode && !highlightAnswers)
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    highlightAnswers = true; // Podświetl odpowiedzi
+                    highlightAnswers = true;
                   });
                 },
                 child: const Text("Sprawdź"),
               ),
-            // Ikona gwiazdki
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
