@@ -1,3 +1,6 @@
+# Uno
+Nie odpowiadamy za błędy w bazie i niezdane egzaminy
+
 # LovelyBSI
 ---
 
