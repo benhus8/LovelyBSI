@@ -14,10 +14,10 @@ class QuestionRepository {
     return data.map((json) {
       final question = Question.fromJson(json);
       question.isStarred = starredQuestions.contains(question.questionId);
+      question.answers.shuffle();
       return question;
     }).toList();
   }
-
   Future<void> saveStarredQuestions(List<Question> questions) async {
     final File file = await _getStarredFile();
 

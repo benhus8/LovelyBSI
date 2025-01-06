@@ -3185,7 +3185,7 @@
             },
             {
                 "text": "Data Protection API (DPAPI)",
-                "isCorrect": false
+                "isCorrect": true
             },
             {
                 "text": "Credential Manager API",
@@ -3196,7 +3196,7 @@
                 "isCorrect": false
             }
         ],
-        "clue": 1,
+        "clue": 2,
         "isStarred": false
     },
     {
@@ -6925,7 +6925,7 @@
         "answers": [
             {
                 "text": "wskazanie konta, z ktorego mozna wykonac polecenie bez pytania o haslo uzytkownika przypisanego do pliku programu tego polecenia, pod warunkiem przynaleznosci do grupy przypisanego do tego pliku",
-                "isCorrect": true
+                "isCorrect": false
             },
             {
                 "text": "okreslenie jaki uzytkownik moze wykonywac konkretne programy z innymi uprawnieniami",
@@ -6940,7 +6940,7 @@
                 "isCorrect": false
             }
         ],
-        "clue": 2,
+        "clue": 1,
         "isStarred": false
     },
     {
@@ -7476,23 +7476,23 @@
         "title": "Mechanizm mandatory Integrity Control (MIC) system Windows: ",
         "answers": [
             {
-                "text": "przypisuje procesowi jeden z 5 poziomow uprawnien uwzglednianych dodatkowo w kontroli dostepu",
-                "isCorrect": false
-            },
-            {
-                "text": "pozwala ograniczyc dostep do odczytu dla wybranych plikow",
-                "isCorrect": false
+                "text": "pozwala ograniczyc swobode komunikacji miedzy procesami",
+                "isCorrect": true
             },
             {
                 "text": "pozwala ograniczyc dostep do zapisu w systemie plikow",
                 "isCorrect": true
             },
             {
-                "text": "pozwala ograniczyc swobode komunikacji miedzy procesami",
+                "text": "pozwala ograniczyc dostep do odczytu dla wybranych plikow",
+                "isCorrect": false
+            },
+            {
+                "text": "przypisuje procesowi jeden z kilku poziomow uprawnien uwzglednianych dodatkowo w kontroli dostepu",
                 "isCorrect": true
             }
         ],
-        "clue": 2,
+        "clue": 3,
         "isStarred": false
     },
     {
@@ -9397,6 +9397,366 @@
             },
             {
                 "text": "rlogin, bo drugie costam",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 367,
+        "title": "W przypadku systemu kontroli ACL standardu POSIX użytkownik U należący do grupy G posiada efektywne uprawnienia r do zasobu p jeśli:",
+        "answers": [
+            {
+                "text": "właściciel p ma prawo r oraz p posiada ustawiony bit suid - bez względu na zawartość ACL",
+                "isCorrect": false
+            },
+            {
+                "text": "U oraz G występują na liście ACL bez prawa r, ale kategoria \"wszyscy użytkownicy\" (others) takie uprawniania posiada",
+                "isCorrect": false
+            },
+            {
+                "text": "prawo r zostanie jawnie nadane U lub G",
+                "isCorrect": true
+            },
+            {
+                "text": "U jest właścicielem p - bez względu a zawartość ACL",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 368,
+        "title": "Atak Slow Read",
+        "answers": [
+            {
+                "text": "wymusza nienaturalnie długie podtrzymywanie połączenia TCP",
+                "isCorrect": true
+            },
+            {
+                "text": "manipuluje mechanizmami rozmiaru segmentu oraz okna TCP do spowolnienia komunikacji",
+                "isCorrect": true
+            },
+            {
+                "text": "wykorzystuje funkcję masqarade w iptables w celu nieautoryzowanego ograniczenia przepustowości ruchu skierowanego do atakowanej aplikacji",
+                "isCorrect": false
+            },
+            {
+                "text": "blokuje komunikację sieciową poprzez radykalne zmniejszenie buforów gniazd socketów",
+                "isCorrect": false
+            }
+        ],
+        "clue": 2,
+        "isStarred": false
+    },
+    {
+        "questionId": 369,
+        "title": "Wskaż cechy charakteryzujące kontrolę dostępu MAC:",
+        "answers": [
+            {
+                "text": "tylko wyróżniony oficer bezpieczeństwa może dysponować prawami dostępu do zasobu",
+                "isCorrect": true
+            },
+            {
+                "text": "właściciel zasobu nie może dysponować prawami dostępu do tego zasobu",
+                "isCorrect": true
+            },
+            {
+                "text": "etykiety ochrony danych przypisane do zasobów automatycznie wymuszają uprawniania",
+                "isCorrect": false
+            },
+            {
+                "text": "tylko właściciel zasobu może dysponować prawami dostępu do tego zasobu",
+                "isCorrect": false
+            }
+        ],
+        "clue": 2,
+        "isStarred": false
+    },
+    {
+        "questionId": 370,
+        "title": "Moduł sprzętowy Trusted Platform Module (TPM):",
+        "answers": [
+            {
+                "text": "ma wbudowane wybrane operacje kryptograficzne, wykonywane wewnętrznie",
+                "isCorrect": true
+            },
+            {
+                "text": "umożliwia przechowywanie danych biometrycznych",
+                "isCorrect": true
+            },
+            {
+                "text": "umożliwia przechowywanie kluczy kryptograficznych",
+                "isCorrect": true
+            },
+            {
+                "text": "z założenia ma uniemożliwiać sprzętowe ataki inwazyjne na zawartość swojej pamięci",
+                "isCorrect": true
+            }
+        ],
+        "clue": 4,
+        "isStarred": false
+    },
+    {
+        "questionId": 371,
+        "title": "Ataki o nazwie phising:",
+        "answers": [
+            {
+                "text": "realizowane są za pośrednictwem poczty",
+                "isCorrect": true
+            },
+            {
+                "text": "[X?]realizowane są za pośrednictwem www",
+                "isCorrect": false
+            },
+            {
+                "text": "dotyczą wykradzenia zaufanych certyfikatów CA",
+                "isCorrect": false
+            },
+            {
+                "text": "polegają na zatruwaniu cache przeglądarki www",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 372,
+        "title": "Wskaż cechy filtracji kontekstowej (SPF) realizowanej przez zapory sieciowe:",
+        "answers": [
+            {
+                "text": "zapora utrzymuje listę aktywnych połączeń",
+                "isCorrect": true
+            },
+            {
+                "text": "historia komunikacji nie ma wpływu na decyzje zapory",
+                "isCorrect": false
+            },
+            {
+                "text": "pozwala uniknąć niepotrzebnego sprawdzania reguł dla powracających w ruchu zweryfikowanym w stronę przeciwną",
+                "isCorrect": true
+            },
+            {
+                "text": "dopasowyje pakiety do zapamiętanej historii komunikacji",
+                "isCorrect": true
+            }
+        ],
+        "clue": 3,
+        "isStarred": false
+    },
+    {
+        "questionId": 373,
+        "title": "PGP (GPG) używane jest do:",
+        "answers": [
+            {
+                "text": "realizacji tuneli VPN",
+                "isCorrect": false
+            },
+            {
+                "text": "podpisywania plików muzycznych celem zachowania praw autorskich DRM",
+                "isCorrect": false
+            },
+            {
+                "text": "podpisywania danych",
+                "isCorrect": true
+            },
+            {
+                "text": "szyfrowania plików",
+                "isCorrect": true
+            }
+        ],
+        "clue": 2,
+        "isStarred": false
+    },
+    {
+        "questionId": 374,
+        "title": "$getfacl test owner: jbond group: agents user::rw- user:jbond:r-x group:agents:--x mask::r-x other:--- W takim wypadku użytkownik jbond (będący właścicielem obiektu test), należący do gryu agents, ma efektywne uprawnienia:",
+        "answers": [
+            {
+                "text": "rw",
+                "isCorrect": true
+            },
+            {
+                "text": "rx",
+                "isCorrect": false
+            },
+            {
+                "text": "r",
+                "isCorrect": false
+            },
+            {
+                "text": "rwx",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 375,
+        "title": "Wybierz prawdziwe stwierdzenie dotyczące poniższego polecenia:ssh -L 9999:neptun:23 pluton",
+        "answers": [
+            {
+                "text": "dane kierowane na port 999 systemu neptun zostaną rzesłane w niezabezpieczonej formie na port 23 systemu pluton",
+                "isCorrect": false
+            },
+            {
+                "text": "dane kierowane na port 9999 lokalnego systemu zostaną przesłane w niezabezpieczonej formie na port 23 systemu neptun",
+                "isCorrect": true
+            },
+            {
+                "text": "dane kierowane na port 9999 lokalnego systemu zostaną przesłane w zaszyfrowanej formie na port 22 systemu pluton",
+                "isCorrect": true
+            },
+            {
+                "text": "w wyniku polecenia zestawiony zostanie tunel kryptograficzny między systemem neptun i systemem pluton",
+                "isCorrect": false
+            }
+        ],
+        "clue": 2,
+        "isStarred": false
+    },
+    {
+        "questionId": 376,
+        "title": "Windows Firewall pozwala tworzyć reguły:",
+        "answers": [
+            {
+                "text": "przpuszczające wybrany ruch",
+                "isCorrect": true
+            },
+            {
+                "text": "blokujące wysyłanie ruchu sieciowego przez wskazane programy",
+                "isCorrect": true
+            },
+            {
+                "text": "blokujące odbieranie ruchu sieciowego przez wskazane programy",
+                "isCorrect": true
+            },
+            {
+                "text": "blokujące wybrany ruch",
+                "isCorrect": true
+            }
+        ],
+        "clue": 4,
+        "isStarred": false
+    },
+    {
+        "questionId": 377,
+        "title": "Poleceniem ulimit użytym przez użytkownika w powłoce można:",
+        "answers": [
+            {
+                "text": "stworzyć ograniczenie zasobów obowiązujące wszystkie procesytego użytkownika w systemie (tekże już te istniejące)",
+                "isCorrect": false
+            },
+            {
+                "text": "stworzyć ograniczenie zasobów obowiązujące wszystkie nowe procesy tego użytkownika w systemie",
+                "isCorrect": false
+            },
+            {
+                "text": "stworzyć ograniczenie zasobów obowiązujące wszystkie procesytego użytkownika w systemie, ale tylko aż do zakońcnia bieżącej sesji (wylogowanie użytkownika)",
+                "isCorrect": false
+            },
+            {
+                "text": "stworzyć ograniczenia zasobów obowiązujące tylko daną powłokę i jej procesy potomne",
+                "isCorrect": true
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 378,
+        "title": "Klucz z certyfikatu EFS użytkownika U jest wykorzystywany w systemie NTFS do:",
+        "answers": [
+            {
+                "text": "szyfrowania jednorazowych kluczy, którymi zaszyfrowane zostały poszczególne pliki do których U ma dostęp",
+                "isCorrect": true
+            },
+            {
+                "text": "szyfrowania i deszyfrowania treści plików należących do U",
+                "isCorrect": false
+            },
+            {
+                "text": "szyfrowania i deszyfrowania wszelkiej kolunikacji z użytkownikiem U (np. poczty elektornicznej)",
+                "isCorrect": false
+            },
+            {
+                "text": "szyfrowania i deszyfrowania treści plików należących do użytkowników, którzy udostępnili te pliki użytkownikowi U",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 379,
+        "title": "Zasoby systemu operacyjnego MS Windows udostepnione poprzez SMB: ",
+        "answers": [
+            {
+                "text": "zawsze wymagają uwierzytelnienia (podania hasłą) przy dostępnie zdalnym",
+                "isCorrect": false
+            },
+            {
+                "text": "nazywa sie portami",
+                "isCorrect": false
+            },
+            {
+                "text": "moga miec ograniczony dostep do odczytu i/lub zapisu tylko dla wskazanych uzytkownikow",
+                "isCorrect": true
+            },
+            {
+                "text": "są dostępne zdalnie tylko dla tych użytkowników, którzy posiadają lokalne konto w systemie operacyjnym",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 380,
+        "title": "Użytkownik U systemu Linux jest właścicielem zasobu O w systemie plikó i na liście ACL tego zasobu ma przyznane prawa rw, a maska zawiera prawa r oraz x. Jakie efektywne uprawnienia do O posiada aktualnie U?",
+        "answers": [
+            {
+                "text": "tylko r",
+                "isCorrect": false
+            },
+            {
+                "text": "tylko w",
+                "isCorrect": false
+            },
+            {
+                "text": "rw",
+                "isCorrect": true
+            },
+            {
+                "text": "rwx",
+                "isCorrect": false
+            }
+        ],
+        "clue": 1,
+        "isStarred": false
+    },
+    {
+        "questionId": 381,
+        "title": "Które stwierdzenie najlepiej opisuje mechanizm Bypass Traverse Checking:",
+        "answers": [
+            {
+                "text": "pozwala na ominięcie sprawdzania uprawnień do katalogów na ścieżce do pliku, do którego użytkownik ma przyznany dostęp",
+                "isCorrect": true
+            },
+            {
+                "text": "pozwala na zestawienie tynelu IPsec w sieci wykorzystującej NAT (NAT-T)",
+                "isCorrect": false
+            },
+            {
+                "text": "pozwala na wyświetlanie zawartości katalogu, do którego użytkownik nie ma przyznanego dostępu, ale ma dostęp do któregokolwiek pliku wewnątrz",
+                "isCorrect": false
+            },
+            {
+                "text": "pozwala na dostęp do udziałów sieciowych bez konieczności posiadania konta w zdalnym systemie",
                 "isCorrect": false
             }
         ],

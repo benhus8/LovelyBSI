@@ -45,7 +45,7 @@ def parse_questions(file_path):
 
 
 # Path to the uploaded file
-file_path = "pyta.dat"
+file_path = "baza.txt"
 questions_json = parse_questions(file_path)
 
 # Save the result to a JSON file
