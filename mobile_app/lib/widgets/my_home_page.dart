@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/widgets/question_card.dart';
 
 import '../models/question.dart';
 import '../repositories/question_repository.dart';
+import '../widgets/question_card.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -14,9 +14,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<Question>> _questions;
+  late List<Question> _allQuestions = [];
+  late List<Question> _filteredQuestions =
+      [];
   bool _showStarred = false;
-  bool _isTestMode = false; // Flaga dla trybu Test
+  bool _isTestMode = false;
   int _currentPage = 0;
   final int _questionsPerPage = 10;
 
@@ -26,8 +28,34 @@ class _MyHomePageState extends State<MyHomePage> {
     _loadQuestions();
   }
 
-  void _loadQuestions() {
-    _questions = QuestionRepository().loadQuestions();
+  Future<void> _loadQuestions() async {
+    final questions = await QuestionRepository().loadQuestions();
+    setState(() {
+      _allQuestions = questions;
+      _filterQuestions();
+    });
+  }
+
+  void _filterQuestions() {
+    _filteredQuestions = _allQuestions.where((q) {
+      return _showStarred ? q.isStarred : true;
+    }).toList();
+    _currentPage = 0;
+  }
+
+  void _toggleStarred() {
+    setState(() {
+      _showStarred = !_showStarred;
+      _filterQuestions();
+    });
+
+  }
+
+  void _changeMode(String mode) {
+    setState(() {
+      _isTestMode = mode == "Test";
+      _filterQuestions();
+    });
   }
 
   void _goToPreviousPage() {
@@ -38,16 +66,34 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _goToNextPage(int totalQuestions) {
-    if ((_currentPage + 1) * _questionsPerPage < totalQuestions) {
+  void _goToNextPage() {
+    if ((_currentPage + 1) * _questionsPerPage < _filteredQuestions.length) {
       setState(() {
         _currentPage++;
       });
     }
   }
 
+  int _getStartQuestionNumber() {
+    return _currentPage * _questionsPerPage + 1;
+  }
+
+  int _getEndQuestionNumber() {
+    final end = (_currentPage + 1) * _questionsPerPage;
+    return end > _filteredQuestions.length ? _filteredQuestions.length : end;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final startIndex = _currentPage * _questionsPerPage;
+    final endIndex = startIndex + _questionsPerPage;
+    final paginatedQuestions = _filteredQuestions.sublist(
+      startIndex,
+      endIndex > _filteredQuestions.length
+          ? _filteredQuestions.length
+          : endIndex,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -60,10 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
             onChanged: (String? value) {
               if (value != null) {
-                setState(() {
-                  _isTestMode = value == "Test";
-                  _currentPage = 0;
-                });
+                _changeMode(value);
               }
             },
           ),
@@ -71,35 +114,12 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(
               _showStarred ? Icons.star : Icons.star_border,
             ),
-            onPressed: () {
-              setState(() {
-                _showStarred = !_showStarred;
-                _currentPage = 0;
-                _loadQuestions();
-              });
-            },
+            onPressed: _toggleStarred,
           ),
         ],
       ),
-      body: FutureBuilder<List<Question>>(
-        future: _questions,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final questions = snapshot.data!.where((q) {
-              return _showStarred ? q.isStarred : true;
-            }).toList();
-            final startIndex = _currentPage * _questionsPerPage;
-            final endIndex = startIndex + _questionsPerPage;
-            final paginatedQuestions = questions.sublist(
-              startIndex,
-              endIndex > questions.length ? questions.length : endIndex,
-            );
-
-            return Column(
+      body: _filteredQuestions.isNotEmpty
+          ? Column(
               children: [
                 Expanded(
                   child: ListView.builder(
@@ -117,26 +137,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     ElevatedButton(
                       onPressed: _currentPage > 0 ? _goToPreviousPage : null,
-                      child: const Text('Poprzednia'),
+                      child: const Text('⬅️'),
                     ),
                     Text(
-                      'Strona ${_currentPage + 1} z ${(questions.length / _questionsPerPage).ceil()}',
+                      'Pytania ${_getStartQuestionNumber()}-${_getEndQuestionNumber()} z ${_filteredQuestions.length}',
                     ),
                     ElevatedButton(
-                      onPressed: ((_currentPage + 1) * _questionsPerPage < questions.length)
-                          ? () => _goToNextPage(questions.length)
+                      onPressed: ((_currentPage + 1) * _questionsPerPage <
+                              _filteredQuestions.length)
+                          ? _goToNextPage
                           : null,
-                      child: const Text('Następna'),
+                      child: const Text('➡️'),
                     ),
                   ],
                 ),
               ],
-            );
-          } else {
-            return const Center(child: Text('No questions available.'));
-          }
-        },
-      ),
+            )
+          : const Center(child: Text('Brak pytań do wyświetlenia.')),
     );
   }
 }
