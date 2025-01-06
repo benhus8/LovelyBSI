@@ -22,6 +22,8 @@ class _MainPageState extends State<MainPage> {
   int _currentPage = 0;
   final int _questionsPerPage = 10;
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +71,7 @@ class _MainPageState extends State<MainPage> {
         _currentPage--;
       });
     }
+    _scrollToTop();
   }
 
   void _goToNextPage() {
@@ -77,6 +80,7 @@ class _MainPageState extends State<MainPage> {
         _currentPage++;
       });
     }
+    _scrollToTop();
   }
 
   int _getStartQuestionNumber() {
@@ -86,6 +90,14 @@ class _MainPageState extends State<MainPage> {
   int _getEndQuestionNumber() {
     final end = (_currentPage + 1) * _questionsPerPage;
     return end > _filteredQuestions.length ? _filteredQuestions.length : end;
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -129,6 +141,7 @@ class _MainPageState extends State<MainPage> {
                 Expanded(
                   child: ListView.builder(
                     key: ValueKey(_isTestMode),
+                    controller: _scrollController,
                     itemCount: paginatedQuestions.length,
                     itemBuilder: (context, index) {
                       return QuestionCard(
