@@ -128,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    key: ValueKey(_isTestMode),
                     itemCount: paginatedQuestions.length,
                     itemBuilder: (context, index) {
                       return QuestionCard(
