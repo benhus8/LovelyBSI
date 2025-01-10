@@ -21,6 +21,8 @@ class _MainPageState extends State<MainPage> {
   bool _isTestMode = false;
   int _currentPage = 0;
   final int _questionsPerPage = 10;
+  late List<Question> _originalQuestions = [];
+  bool _isShuffled = false;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -53,6 +55,7 @@ class _MainPageState extends State<MainPage> {
     final questions = await QuestionRepository().loadQuestions();
     setState(() {
       _allQuestions = questions;
+      _originalQuestions = List.from(questions);
       _filterQuestions();
     });
   }
@@ -73,6 +76,21 @@ class _MainPageState extends State<MainPage> {
     });
 
     _saveStarredQuestions();
+  }
+
+  void _toggleShuffle() {
+    setState(() {
+      if (_isShuffled) {
+        _allQuestions = List.from(_originalQuestions);
+      } else {
+        _allQuestions.shuffle();
+        for (var question in _allQuestions) {
+          question.answers.shuffle();
+        }
+      }
+      _isShuffled = !_isShuffled;
+      _filterQuestions();
+    });
   }
 
   void _changeMode(String mode) {
@@ -151,6 +169,12 @@ class _MainPageState extends State<MainPage> {
               _showStarred ? Icons.star : Icons.star_border,
             ),
             onPressed: _toggleStarred,
+          ),
+          IconButton(
+            icon: Icon(
+              _isShuffled ? Icons.sort : Icons.shuffle,
+            ),
+            onPressed: _toggleShuffle,
           ),
         ],
       ),
