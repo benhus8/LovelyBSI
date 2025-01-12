@@ -274,13 +274,42 @@ class _MainPageState extends State<MainPage> {
               tooltip: 'Losowa kolejność',
             ),
           ],
+          if (_currentMode == AppMode.practice)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => _buildSettingsMenu(),
+                );
+              },
+            ),
         ],
       ),
       body: _allQuestions.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : _currentMode == AppMode.practice
-              ? PracticeModeScreen(questions: _allQuestions)
+              ? PracticeModeScreen(questions: _allQuestions, isReviewMode: false)
               : _buildLearningTestMode(),
+    );
+  }
+
+  Widget _buildSettingsMenu() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.refresh),
+            title: const Text('Resetuj postęp'),
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              // _resetProgress(); // Removed from here
+            },
+          ),
+        ],
+      ),
     );
   }
 }

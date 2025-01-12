@@ -4,6 +4,7 @@ import '../models/question_progress.dart';
 import '../repositories/progress_repository.dart';
 import '../services/question_selector.dart';
 import 'progress_indicator_widget.dart';
+import 'explanation_dialog.dart';
 
 class PracticeModeScreen extends StatefulWidget {
   final List<Question> questions;
@@ -144,13 +145,23 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
     _loadProgressAndQuestion();
   }
 
+  void _showExplanationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => ExplanationDialog(
+        explanation: _currentQuestion.explanation,
+        keyTakeaways: _currentQuestion.keyTakeaways,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final content = Column(
+    return Column(
       children: [
         if (!widget.isReviewMode) 
           ProgressIndicatorWidget(
@@ -209,16 +220,17 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (!widget.isReviewMode)
-                        TextButton(
-                          onPressed: _resetProgress,
-                          child: const Text('Resetuj postęp'),
-                        ),
                       const Spacer(),
+                      if (_showingResults)
+                        ElevatedButton(
+                          onPressed: _showExplanationDialog,
+                          child: const Text('Wyjaśnienie'),
+                        ),
+                      const SizedBox(width: 8),
                       ElevatedButton(
                         onPressed: _showingResults ? _loadNextQuestion : _checkAnswers,
                         child: Text(_showingResults 
-                          ? (widget.isReviewMode ? 'Powrót do przeglądu' : 'Następne pytanie') 
+                          ? (widget.isReviewMode ? 'Powrót do przeglądu' : 'Następne pytanie')
                           : 'Sprawdź odpowiedzi'),
                       ),
                     ],
@@ -230,20 +242,5 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
         ),
       ],
     );
-
-    if (widget.isReviewMode) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Ćwiczenie pytania'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        body: content,
-      );
-    }
-
-    return content;
   }
 } 
