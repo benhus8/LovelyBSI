@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../models/question.dart';
 import '../repositories/question_repository.dart';
 import '../widgets/question_card.dart';
+import '../widgets/practice_mode_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
@@ -13,12 +13,17 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+enum AppMode {
+  learning,
+  test,
+  practice
+}
+
 class _MainPageState extends State<MainPage> {
   late List<Question> _allQuestions = [];
-  late List<Question> _filteredQuestions =
-      [];
+  late List<Question> _filteredQuestions = [];
   bool _showStarred = false;
-  bool _isTestMode = false;
+  AppMode _currentMode = AppMode.learning;
   int _currentPage = 0;
   final int _questionsPerPage = 10;
   late List<Question> _originalQuestions = [];
@@ -93,12 +98,10 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void _changeMode(String mode) {
-    _saveCurrentPage(_isTestMode ? "test" : "learning");
+  void _changeMode(AppMode mode) {
     setState(() {
-      _isTestMode = mode == "Test";
+      _currentMode = mode;
       _filterQuestions();
-      _setPageForMode(_isTestMode ? "test" : "learning");
     });
   }
 
@@ -137,8 +140,18 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  String _getModeDisplayName(AppMode mode) {
+    switch (mode) {
+      case AppMode.learning:
+        return 'Nauka';
+      case AppMode.test:
+        return 'Test';
+      case AppMode.practice:
+        return 'Prawo jazdy';
+    }
+  }
+
+  Widget _buildLearningTestMode() {
     final startIndex = _currentPage * _questionsPerPage;
     final endIndex = startIndex + _questionsPerPage;
     final paginatedQuestions = _filteredQuestions.sublist(
@@ -148,109 +161,122 @@ class _MainPageState extends State<MainPage> {
           : endIndex,
     );
 
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            key: ValueKey(_currentMode),
+            controller: _scrollController,
+            itemCount: paginatedQuestions.length,
+            itemBuilder: (context, index) {
+              return QuestionCard(
+                question: paginatedQuestions[index],
+                isTestMode: _currentMode == AppMode.test,
+              );
+            },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 16),
+              child: ElevatedButton(
+                onPressed: _currentPage > 0 ? _goToPreviousPage : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  elevation: 5,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.arrow_back),
+                    SizedBox(width: 8),
+                  ],
+                ),
+              ),
+            ),
+            Text(
+              'Pytania ${_getStartQuestionNumber()}-${_getEndQuestionNumber()} z ${_filteredQuestions.length}',
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 16),
+              child: ElevatedButton(
+                onPressed: ((_currentPage + 1) * _questionsPerPage < _filteredQuestions.length)
+                    ? _goToNextPage
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  elevation: 5,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          DropdownButton<String>(
-            value: _isTestMode ? "Test" : "Nauka",
-            items: const [
-              DropdownMenuItem(value: "Nauka", child: Text("Nauka")),
-              DropdownMenuItem(value: "Test", child: Text("Test")),
-            ],
-            onChanged: (String? value) {
+          DropdownButton<AppMode>(
+            value: _currentMode,
+            items: AppMode.values.map((mode) => 
+              DropdownMenuItem(
+                value: mode,
+                child: Text(_getModeDisplayName(mode)),
+              )
+            ).toList(),
+            onChanged: (AppMode? value) {
               if (value != null) {
                 _changeMode(value);
               }
             },
           ),
-          IconButton(
-            icon: Icon(
-              _showStarred ? Icons.star : Icons.star_border,
+          if (_currentMode != AppMode.practice) ...[
+            IconButton(
+              icon: Icon(
+                _showStarred ? Icons.star : Icons.star_border,
+              ),
+              onPressed: _toggleStarred,
+              tooltip: 'Ulubione pytania',
             ),
-            onPressed: _toggleStarred,
-          ),
-          IconButton(
-            icon: Icon(
-              _isShuffled ? Icons.sort : Icons.shuffle,
+            IconButton(
+              icon: Icon(
+                _isShuffled ? Icons.sort : Icons.shuffle,
+              ),
+              onPressed: _toggleShuffle,
+              tooltip: 'Losowa kolejność',
             ),
-            onPressed: _toggleShuffle,
-          ),
+          ],
         ],
       ),
-      body: _filteredQuestions.isNotEmpty
-          ? Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    key: ValueKey(_isTestMode),
-                    controller: _scrollController,
-                    itemCount: paginatedQuestions.length,
-                    itemBuilder: (context, index) {
-                      return QuestionCard(
-                        question: paginatedQuestions[index],
-                        isTestMode: _isTestMode,
-                      );
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 16),
-                      child: ElevatedButton(
-                        onPressed: _currentPage > 0 ? _goToPreviousPage : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(Icons.arrow_back),
-                            SizedBox(width: 8),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'Pytania ${_getStartQuestionNumber()}-${_getEndQuestionNumber()} z ${_filteredQuestions.length}',
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      child: ElevatedButton(
-                        onPressed: ((_currentPage + 1) * _questionsPerPage < _filteredQuestions.length)
-                            ? _goToNextPage
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          elevation: 5,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            SizedBox(width: 8),
-                            Icon(Icons.arrow_forward),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          : const Center(child: Text('Brak pytań do wyświetlenia.')),
+      body: _allQuestions.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : _currentMode == AppMode.practice
+              ? PracticeModeScreen(questions: _allQuestions)
+              : _buildLearningTestMode(),
     );
   }
 }
