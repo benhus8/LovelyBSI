@@ -19,6 +19,9 @@ Apka jest we flutterku, na dole jest link do aktualnego APK, a bogacze niech se 
 
 ---
 
+# Duo
+Wyjaśnienia do odpowiedzi zostały wygenerowane przez AI. Nie traktować tego jako ground truth, ale raczej jako pomoc przy tworzeniu połączeń mózgowych, jak ktoś nic nie kuma.
+
 Miłego klikania all i walenia bazuni!
 
 Apk na dysku:
