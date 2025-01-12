@@ -59,24 +59,43 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
     });
   }
 
-  Color _getAnswerColor(int index) {
-    if (!_showingResults) {
-      return _selectedAnswers.contains(index)
-          ? Colors.grey.withOpacity(0.3)
-          : Colors.white;
-    }
-
+  BoxDecoration _getAnswerDecoration(int index) {
     final isCorrect = _currentQuestion.answers[index].isCorrect;
     final isSelected = _selectedAnswers.contains(index);
 
-    if (isCorrect && isSelected) {
-      return Colors.green.withOpacity(0.3);
-    } else if (isCorrect) {
-      return Colors.green.withOpacity(0.3);
-    } else if (isSelected) {
-      return Colors.red.withOpacity(0.3);
+    if (!_showingResults) {
+      return BoxDecoration(
+        color: isSelected ? Colors.grey.withOpacity(0.3) : Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+      );
     }
-    return Colors.white;
+
+    Color backgroundColor = Colors.white;
+    BoxBorder border = Border.all(color: Colors.grey);
+
+    if (isCorrect) {
+      // Correct answer - always show green background
+      backgroundColor = Colors.green.withOpacity(0.2);
+      
+      if (!isSelected) {
+        // Correct answer that wasn't selected - add warning border
+        border = Border.all(
+          color: Colors.amber,
+          width: 2.0,
+          style: BorderStyle.solid,
+        );
+      }
+    } else if (isSelected) {
+      // Wrong selection - show red background
+      backgroundColor = Colors.red.withOpacity(0.2);
+    }
+
+    return BoxDecoration(
+      color: backgroundColor,
+      border: border,
+      borderRadius: BorderRadius.circular(8.0),
+    );
   }
 
   void _checkAnswers() {
@@ -167,12 +186,20 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 8.0),
                             padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: _getAnswerColor(index),
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8.0),
+                            decoration: _getAnswerDecoration(index),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(answer.text),
+                                ),
+                                if (_showingResults && _currentQuestion.answers[index].isCorrect)
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                    size: 20,
+                                  ),
+                              ],
                             ),
-                            child: Text(answer.text),
                           ),
                         );
                       },
