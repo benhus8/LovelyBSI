@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/question.dart';
 import '../models/question_progress.dart';
 import 'practice_mode_screen.dart';
+import '../services/question_selector.dart';
+import '../repositories/progress_repository.dart';
 
 class ReviewQuestionsScreen extends StatelessWidget {
   final List<Question> questions;
@@ -66,6 +68,8 @@ class ReviewQuestionsScreen extends StatelessWidget {
                               questions: [question],
                               isReviewMode: true,
                               key: ValueKey('practice_${question.questionId}'),
+                              questionSelector: QuestionSelector(),
+                              progressRepository: ProgressRepository(),
                             ),
                           ),
                         );

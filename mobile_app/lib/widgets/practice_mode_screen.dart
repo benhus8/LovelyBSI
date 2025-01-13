@@ -5,15 +5,20 @@ import '../repositories/progress_repository.dart';
 import '../services/question_selector.dart';
 import 'progress_indicator_widget.dart';
 import 'explanation_dialog.dart';
+import '../services/event_bus.dart';
 
 class PracticeModeScreen extends StatefulWidget {
   final List<Question> questions;
   final bool isReviewMode;
+  final QuestionSelector questionSelector;
+  final ProgressRepository progressRepository;
 
   const PracticeModeScreen({
     Key? key,
     required this.questions,
     this.isReviewMode = false,
+    required this.questionSelector,
+    required this.progressRepository,
   }) : super(key: key);
 
   @override
@@ -22,22 +27,33 @@ class PracticeModeScreen extends StatefulWidget {
 
 class _PracticeModeScreenState extends State<PracticeModeScreen> {
   late Question _currentQuestion;
-  final QuestionSelector _selector = QuestionSelector();
-  final ProgressRepository _progressRepo = ProgressRepository();
   late Map<int, QuestionProgress> _progress;
   Set<int> _selectedAnswers = {};
   bool _showingResults = false;
   bool _isLoading = true;
+  final List<int> _recentQuestionIds = []; // Track recent questions
+  final int _maxRecentQuestions = 5;
 
   @override
   void initState() {
     super.initState();
     _loadProgressAndQuestion();
+    eventBus.onResetProgress.listen(_handleResetProgress);
+  }
+
+  @override
+  void dispose() {
+    eventBus.onResetProgress.listen(_handleResetProgress);
+    super.dispose();
+  }
+
+  void _handleResetProgress(void _) {
+    _resetProgress();
   }
 
   Future<void> _loadProgressAndQuestion() async {
     setState(() => _isLoading = true);
-    _progress = await _progressRepo.loadProgress();
+    _progress = await widget.progressRepository.loadProgress();
     
     if (widget.isReviewMode && widget.questions.length == 1) {
       _currentQuestion = widget.questions.first;
@@ -119,7 +135,7 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
       _progress[_currentQuestion.questionId] = questionProgress;
       
       // Save progress
-      _progressRepo.saveProgress(_progress);
+      widget.progressRepository.saveProgress(_progress);
     });
   }
 
@@ -131,18 +147,27 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
     }
 
     setState(() {
-      _currentQuestion = _selector.selectNextQuestion(
+      _currentQuestion = widget.questionSelector.selectNextQuestion(
         widget.questions,
         _progress,
+        _recentQuestionIds, // Pass recent questions
       );
+      
+      // Update recent questions
+      _recentQuestionIds.add(_currentQuestion.questionId);
+      while (_recentQuestionIds.length > _maxRecentQuestions) {
+        _recentQuestionIds.removeAt(0);
+      }
+      
       _selectedAnswers = {};
       _showingResults = false;
     });
   }
 
   Future<void> _resetProgress() async {
-    await _progressRepo.resetProgress();
+    await widget.progressRepository.resetProgress();
     _loadProgressAndQuestion();
+    _recentQuestionIds.clear(); // Clear recent questions
   }
 
   void _showExplanationDialog() {

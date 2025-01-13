@@ -3,6 +3,9 @@ import '../models/question.dart';
 import '../repositories/question_repository.dart';
 import '../widgets/question_card.dart';
 import '../widgets/practice_mode_screen.dart';
+import '../services/question_selector.dart';
+import '../repositories/progress_repository.dart';
+import '../services/event_bus.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
@@ -50,6 +53,24 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _loadQuestions();
+    eventBus.onStarToggled.listen(_handleStarToggle);
+  }
+
+  @override
+  void dispose() {
+    eventBus.dispose();
+    super.dispose();
+  }
+
+  void _handleStarToggle(int questionId) {
+    final questionIndex = _allQuestions.indexWhere((q) => q.questionId == questionId);
+    if (questionIndex != -1) {
+      setState(() {
+        _allQuestions[questionIndex].isStarred = !_allQuestions[questionIndex].isStarred;
+        _filterQuestions();
+      });
+      _saveStarredQuestions();
+    }
   }
 
   void _saveStarredQuestions() async {
@@ -79,8 +100,6 @@ class _MainPageState extends State<MainPage> {
       _filterQuestions();
       _setPageForMode(_showStarred ? "starred" : "all");
     });
-
-    _saveStarredQuestions();
   }
 
   void _toggleShuffle() {
@@ -289,7 +308,12 @@ class _MainPageState extends State<MainPage> {
       body: _allQuestions.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : _currentMode == AppMode.practice
-              ? PracticeModeScreen(questions: _allQuestions, isReviewMode: false)
+              ? PracticeModeScreen(
+                  questions: _allQuestions,
+                  isReviewMode: false,
+                  questionSelector: QuestionSelector(),
+                  progressRepository: ProgressRepository(),
+                )
               : _buildLearningTestMode(),
     );
   }
@@ -304,8 +328,8 @@ class _MainPageState extends State<MainPage> {
             leading: const Icon(Icons.refresh),
             title: const Text('Resetuj postęp'),
             onTap: () {
-              Navigator.pop(context); // Close the bottom sheet
-              // _resetProgress(); // Removed from here
+              Navigator.pop(context);
+              eventBus.publishResetProgress();
             },
           ),
         ],
