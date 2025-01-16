@@ -1945,7 +1945,7 @@
                 "isCorrect": false
             },
             {
-                "text": "operacja zapisu wartosci parametrow tego klucza przez proces nie posiadajacy uprawnienia zapisu konczy sie powodzeniem",
+                "text": "operacja zapisu wartosci parametrow tego klucza przez proces posiadajacy uprawnienia zapisu konczy sie powodzeniem",
                 "isCorrect": true
             },
             {
@@ -3188,7 +3188,7 @@
             },
             {
                 "text": "zastosowanie echanizmu szyfrowania asymetrycznego w procesie autoryzacji",
-                "isCorrect": false
+                "isCorrect": true
             },
             {
                 "text": "zastosowanie pojedynczego uwierzytelniania podmiotu w dostepie do wielu roznych zasobow",
@@ -3966,24 +3966,8 @@
     },
     {
         "questionId": 129,
-        "title": "Nastepujaca regula filtracji zapory sieciowej od ",
+        "title": "Nastepujaca regula filtracji zapory sieciowej od *.*.*.* do 1.1.1.1:",
         "answers": [
-            {
-                "text": ".",
-                "isCorrect": false
-            },
-            {
-                "text": ".",
-                "isCorrect": false
-            },
-            {
-                "text": ".",
-                "isCorrect": false
-            },
-            {
-                "text": "do 1.1.1.1:",
-                "isCorrect": false
-            },
             {
                 "text": "blokuje wszelkie połączenia nawiązywane z serwera www o dowolnym adresie",
                 "isCorrect": false
