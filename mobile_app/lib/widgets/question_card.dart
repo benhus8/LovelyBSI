@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/answer.dart';
 import '../models/question.dart';
+import '../services/event_bus.dart';
 
 class QuestionCard extends StatefulWidget {
   final Question question;
@@ -111,6 +112,7 @@ class _QuestionCardState extends State<QuestionCard> {
                   color: widget.question.isStarred ? Colors.yellow : Colors.grey,
                 ),
                 onPressed: () {
+                  eventBus.publishStarToggled(widget.question.questionId);
                   setState(() {
                     widget.question.isStarred = !widget.question.isStarred;
                   });
