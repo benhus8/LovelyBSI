@@ -14,10 +14,12 @@ class QuestionRepository {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final List<int> starredQuestions = await _loadStarredQuestions();
 
         return data.map((json) {
           final question = Question.fromJson(json);
+          question.isStarred = starredQuestions.contains(question.questionId);
           question.answers.shuffle();
           return question;
         }).toList();
