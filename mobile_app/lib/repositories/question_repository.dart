@@ -3,8 +3,29 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import '../models/question.dart';
+import 'package:http/http.dart' as http;
 
 class QuestionRepository {
+
+  Future<List<Question>> loadQuestionsFromServer() async {
+    final url = Uri.parse('server-url');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+
+      return data.map((json) {
+        final question = Question.fromJson(json);
+        question.answers.shuffle();
+        return question;
+      }).toList();
+    } else {
+      throw Exception('Failed to load questions');
+    }
+  }
+
+
+
   Future<List<Question>> loadQuestions() async {
     final String response = await rootBundle.loadString('assets/questions.json');
     final List<dynamic> data = jsonDecode(response);
