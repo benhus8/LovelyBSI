@@ -186,16 +186,16 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Column(
-      children: [
-        if (!widget.isReviewMode) 
-          ProgressIndicatorWidget(
-            progress: _progress,
-            totalQuestions: widget.questions.length,
-            questions: widget.questions,
-          ),
-        Expanded(
-          child: Card(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (!widget.isReviewMode)
+            ProgressIndicatorWidget(
+              progress: _progress,
+              totalQuestions: widget.questions.length,
+              questions: widget.questions,
+            ),
+          Card(
             margin: const EdgeInsets.all(8.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -212,34 +212,34 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 16),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _currentQuestion.answers.length,
-                      itemBuilder: (context, index) {
-                        final answer = _currentQuestion.answers[index];
-                        return GestureDetector(
-                          onTap: () => _onAnswerSelected(index),
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 8.0),
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: _getAnswerDecoration(index),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(answer.text),
+                  ListView.builder(
+                    shrinkWrap: true, // Dodano shrinkWrap
+                    physics: const NeverScrollableScrollPhysics(), // Dodano NeverScrollableScrollPhysics
+                    itemCount: _currentQuestion.answers.length,
+                    itemBuilder: (context, index) {
+                      final answer = _currentQuestion.answers[index];
+                      return GestureDetector(
+                        onTap: () => _onAnswerSelected(index),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 8.0),
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: _getAnswerDecoration(index),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(answer.text),
+                              ),
+                              if (_showingResults && _currentQuestion.answers[index].isCorrect)
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 20,
                                 ),
-                                if (_showingResults && _currentQuestion.answers[index].isCorrect)
-                                  const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                    size: 20,
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -254,9 +254,9 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
                       const SizedBox(width: 8),
                       ElevatedButton(
                         onPressed: _showingResults ? _loadNextQuestion : _checkAnswers,
-                        child: Text(_showingResults 
-                          ? (widget.isReviewMode ? 'Powrót do przeglądu' : 'Następne pytanie')
-                          : 'Sprawdź odpowiedzi'),
+                        child: Text(_showingResults
+                            ? (widget.isReviewMode ? 'Powrót do przeglądu' : 'Następne pytanie')
+                            : 'Sprawdź odpowiedzi'),
                       ),
                     ],
                   ),
@@ -264,8 +264,8 @@ class _PracticeModeScreenState extends State<PracticeModeScreen> {
               ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      ),
+    );;
   }
 } 
