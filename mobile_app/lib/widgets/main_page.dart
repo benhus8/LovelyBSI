@@ -66,7 +66,6 @@ class _MainPageState extends State<MainPage> {
     final questionIndex = _allQuestions.indexWhere((q) => q.questionId == questionId);
     if (questionIndex != -1) {
       setState(() {
-        _allQuestions[questionIndex].isStarred = !_allQuestions[questionIndex].isStarred;
         _filterQuestions();
       });
       _saveStarredQuestions();
