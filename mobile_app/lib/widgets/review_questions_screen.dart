@@ -55,7 +55,7 @@ class ReviewQuestionsScreen extends StatelessWidget {
                     vertical: 4.0,
                   ),
                   child: ListTile(
-                    title: Text(question.title),
+                    title: Text(  '${question.questionId} ${question.title}'),
                     subtitle: Text(
                       'Skuteczność: ${(questionProgress.successRate * 100).toStringAsFixed(1)}%\n'
                       'Próby: ${questionProgress.timesAttempted}',
