@@ -8,19 +8,24 @@ import 'package:http/http.dart' as http;
 class QuestionRepository {
 
   Future<List<Question>> loadQuestionsFromServer() async {
-    final url = Uri.parse('server-url');
-    final response = await http.get(url);
+    final url = Uri.parse('url');
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+    try {
+      final response = await http.get(url);
 
-      return data.map((json) {
-        final question = Question.fromJson(json);
-        question.answers.shuffle();
-        return question;
-      }).toList();
-    } else {
-      throw Exception('Failed to load questions');
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        return data.map((json) {
+          final question = Question.fromJson(json);
+          question.answers.shuffle();
+          return question;
+        }).toList();
+      } else {
+        return loadQuestions();
+      }
+    } catch (error) {
+      return loadQuestions();
     }
   }
 
